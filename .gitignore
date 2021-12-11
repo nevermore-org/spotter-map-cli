@@ -133,3 +133,11 @@ dist
 # TernJS port file
 
 .tern-port
+
+# The Tyria map .jpg file
+
+tyria.jpg
+
+# The Output-Data-Folder
+
+/src/Data
