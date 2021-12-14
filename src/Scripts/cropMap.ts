@@ -1,8 +1,10 @@
+import { unlinkSync } from "fs";
 import prompt, { Schema } from "prompt";
 import sharp from "sharp";
-import { getMapInfo } from "../API/GW2API";
 import { Coordinates, MapDimensions } from "../Model/MapDimensions";
-import { GW_MAPS_IDS } from "./enum/GW_MAPS_IDS";
+import MapInfo from "../Model/MapInfo";
+import ANSI from "../Util/enum/ANSI";
+import TYRIA_MAPS from "./enum/TYRIA_MAPS";
 
 
 const pointToCoordinates = (pointArray: number[]) => {
@@ -17,21 +19,20 @@ const mapDimsFromPoints = (cornerPoints: number[][]) => {
     return <MapDimensions> {upper_left: upperLeft, lower_right: lowerRight, width: width, height: height};
 }
 
+
 /**
  * Crops a single map from the Tyria continent
- * Input should be tyria.jpg at root of the project
+ * Input sharp instance should be of the tyria.jpg at the root of the project
  * Output is stored inside the ./src/Data folder
  */
-export async function cropSingleMap(mapName: string, tyriaSharpInstance: sharp.Sharp) {
-    const mapID = GW_MAPS_IDS[mapName];
-    const mapInfo = await getMapInfo(mapID);
-    const mapDims = mapDimsFromPoints(mapInfo.continent_rect);
-
-    // might want to later move this up one layer
+export async function cropSingleMap(map: MapInfo, tyriaSharpInstance: sharp.Sharp) {
+    console.log(`Working on the map of ${map.name}...`);
+    const mapDims = mapDimsFromPoints(map.continent_rect);
+    
     tyriaSharpInstance
-    .extract({ left: mapDims.upper_left.x, top: mapDims.upper_left.y, width: mapDims.width, height: mapDims.height })
-    .toFile(`./src/Data/${mapName}_map.jpg`, function (err) {
-        if (err) console.log(err); else {console.log('Success!')}
+        .extract({ left: mapDims.upper_left.x, top: mapDims.upper_left.y, width: mapDims.width, height: mapDims.height })
+        .toFile(`./src/Data/bmap_${map.name}.jpg`, function (err) {
+            if (err) console.log(err); else {console.log('Success!')}
     });
 }
 
@@ -43,14 +44,15 @@ export async function runCropScript(mode?: string) {
 
     if (mode === 'single'){
         prompt.start();
+        prompt.message = "";
 
         const schema: Schema = {
             properties: {
                 mapName: {
-                    description: 'Which map do you want? (e.g. Queensdale)',
+                    description: `${ANSI.CYAN}Which map do you want? ${ANSI.BRIGHT_BLACK}(e.g. Queensdale)${ANSI.RESET}`,
                     type: 'string',
                     conform: function(mapName: string){
-                        return GW_MAPS_IDS[mapName] !== undefined;
+                        return TYRIA_MAPS.find(map => map.name === mapName) !== undefined;
                     },
                     message: `Invalid map name.`,
                     required: true                 
@@ -59,15 +61,21 @@ export async function runCropScript(mode?: string) {
         }
 
         prompt.get(schema, async function(err, result){
+            if (err){ return };
             const mapName = <string> result.mapName;
+            const mapInfo = <MapInfo> TYRIA_MAPS.find( map => map.name === mapName);
 
-            console.log(`Creating the map of ${mapName}...`);
-            await cropSingleMap(mapName, tyriaSharpInstance);
+            await cropSingleMap(mapInfo, tyriaSharpInstance);
         })
 
     }
     else if (mode === 'all'){
         console.log('Creating all tyrian maps...');
-        // TODO
+
+        // for (const map of TYRIA_MAPS){
+        //     cropSingleMap(map, tyriaSharpInstance);            
+        //     // sleep 6 sec to give it a little "breathing" room
+        //     await new Promise(resolve => setTimeout(resolve, 10000));
+        // }
     }
 }

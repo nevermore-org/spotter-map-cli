@@ -10,18 +10,20 @@ import { SCRIPTS } from './Scripts/enum/SCRIPTS';
 //cropMap('Queensdale');
 
 async function main() {
-    console.log(`\n${ANSI.BLUE}Spotter Map Tool${ANSI.RESET}\n${'-'.repeat(16)}`);
+    console.log(`\n${ANSI.BRIGHT_GREEN}Spotter Map Tool${ANSI.RESET}\n${'-'.repeat(16)}`);
     
     SCRIPTS.forEach((script, index) => {
-        console.log(`[${ANSI.GREEN}${index + 1}${ANSI.RESET}] ${script.name}`);
+        console.log(`[${ANSI.GREEN}${index + 1}${ANSI.RESET}] ${script.name}\n${ANSI.BRIGHT_BLACK}${script.description}${ANSI.RESET}`);
     })
+    console.log('');
 
     prompt.start();
+    prompt.message = "";
 
     const schema: Schema = {
         properties: {
             scriptIndex: {
-                description: 'Script to run',
+                description: `${ANSI.CYAN}Script to run${ANSI.RESET}`,
                 type: 'number',
                 conform: function (scriptIndex) {
                     return scriptIndex !== 0 && scriptIndex - 1 < SCRIPTS.length;
@@ -33,10 +35,10 @@ async function main() {
     }
 
     prompt.get(schema, function(err, result){
-        if (!err){
-            const scriptInfo = SCRIPTS[<number> result.scriptIndex - 1];
-            scriptInfo.runFunction(scriptInfo.optarg);
-        }
+        if (err){ return };
+        
+        const scriptInfo = SCRIPTS[<number> result.scriptIndex - 1];
+        scriptInfo.runFunction(scriptInfo.optarg);
     });
 }
 
