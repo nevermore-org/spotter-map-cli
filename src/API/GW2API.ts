@@ -1,7 +1,11 @@
 import axios from "axios"
+import FullMapInfo from "../Model/FullMapInfo";
 import MapInfo from "../Model/MapInfo";
+import RegionInfo from "../Model/RegionInfo";
 import { chunkify } from "../Util/util";
 import { GW_API_URL } from "./enum/GW_API_URL"
+import stringify from "json-stringify-pretty-compact";
+import TYRIA_MAPS from "../Scripts/enum/TYRIA_MAPS";
 
 
 export const getMapInfo = async (mapID: number) => {
@@ -31,4 +35,21 @@ export const getAllTyrianMaps = async () => {
     }));
 
     return mapInfos.flat();
+}
+
+export const getTyrianMapsData = async () => {
+    const regionsResponse = await axios.get(`${GW_API_URL.REGIONS}`);
+    const regions: RegionInfo[] = regionsResponse.data;
+
+    // for (const region of regions){
+    //     const jsonObj: Record<string, FullMapInfo> = JSON.parse(stringify(region.maps));
+
+    //     for (const key in jsonObj) {
+    //         if (TYRIA_MAPS.find(map => map.id == jsonObj[key].id)){
+    //             console.log(`${key}: ${stringify(jsonObj[key])},`);
+    //         }
+    //     }
+    // }
+    
+    return regions;    
 }

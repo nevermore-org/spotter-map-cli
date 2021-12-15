@@ -4,6 +4,7 @@ import sharp from "sharp";
 import { Coordinates, MapDimensions } from "../Model/MapDimensions";
 import MapInfo from "../Model/MapInfo";
 import ANSI from "../Util/enum/ANSI";
+import PROMPT_SCHEMAS from "../Util/enum/PROMPT_SCHEMAS";
 import TYRIA_MAPS from "./enum/TYRIA_MAPS";
 
 
@@ -31,7 +32,7 @@ export async function cropSingleMap(map: MapInfo, tyriaSharpInstance: sharp.Shar
     
     tyriaSharpInstance
         .extract({ left: mapDims.upper_left.x, top: mapDims.upper_left.y, width: mapDims.width, height: mapDims.height })
-        .toFile(`./src/Data/bmap_${map.name}.jpg`, function (err) {
+        .toFile(`./src/Data/bmap_${map.id}.jpg`, function (err) {
             if (err) console.log(err); else {console.log('Success!')}
     });
 }
@@ -46,36 +47,14 @@ export async function runCropScript(mode?: string) {
         prompt.start();
         prompt.message = "";
 
-        const schema: Schema = {
-            properties: {
-                mapName: {
-                    description: `${ANSI.CYAN}Which map do you want? ${ANSI.BRIGHT_BLACK}(e.g. Queensdale)${ANSI.RESET}`,
-                    type: 'string',
-                    conform: function(mapName: string){
-                        return TYRIA_MAPS.find(map => map.name === mapName) !== undefined;
-                    },
-                    message: `Invalid map name.`,
-                    required: true                 
-                }
-            }
-        }
+        const schema: Schema = PROMPT_SCHEMAS['MAP'];
 
         prompt.get(schema, async function(err, result){
             if (err){ return };
-            const mapName = <string> result.mapName;
-            const mapInfo = <MapInfo> TYRIA_MAPS.find( map => map.name === mapName);
-
+            const mapID = <number> result.mapID;
+            
+            const mapInfo = <MapInfo> TYRIA_MAPS.find( map => map.id === mapID);
             await cropSingleMap(mapInfo, tyriaSharpInstance);
         })
-
-    }
-    else if (mode === 'all'){
-        console.log('Creating all tyrian maps...');
-
-        // for (const map of TYRIA_MAPS){
-        //     cropSingleMap(map, tyriaSharpInstance);            
-        //     // sleep 6 sec to give it a little "breathing" room
-        //     await new Promise(resolve => setTimeout(resolve, 10000));
-        // }
     }
 }

@@ -3,11 +3,13 @@ import ANSI from './Util/enum/ANSI';
 import sharp from 'sharp';
 import prompt, { message, Schema } from 'prompt';
 import { SCRIPTS } from './Scripts/enum/SCRIPTS';
+import { getTyrianMapsData } from './API/GW2API';
 
 // http.createServer(() => {
 // }).listen("8080");
 
 //cropMap('Queensdale');
+
 
 async function main() {
     console.log(`\n${ANSI.BRIGHT_GREEN}Spotter Map Tool${ANSI.RESET}\n${'-'.repeat(16)}`);
