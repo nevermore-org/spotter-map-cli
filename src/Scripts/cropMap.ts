@@ -8,11 +8,11 @@ import PROMPT_SCHEMAS from "../Util/enum/PROMPT_SCHEMAS";
 import TYRIA_MAPS from "./enum/TYRIA_MAPS";
 
 
-const pointToCoordinates = (pointArray: number[]) => {
+export const pointToCoordinates = (pointArray: number[]) => {
     return <Coordinates> {x: pointArray[0], y: pointArray[1]};
 }
 
-const mapDimsFromPoints = (cornerPoints: number[][]) => {
+export const mapDimsFromPoints = (cornerPoints: number[][]) => {
     const upperLeft = pointToCoordinates(cornerPoints[0]);
     const lowerRight = pointToCoordinates(cornerPoints[1]);
     const width = lowerRight.x - upperLeft.x;
@@ -32,7 +32,7 @@ export async function cropSingleMap(map: MapInfo, tyriaSharpInstance: sharp.Shar
     
     tyriaSharpInstance
         .extract({ left: mapDims.upper_left.x, top: mapDims.upper_left.y, width: mapDims.width, height: mapDims.height })
-        .toFile(`./src/Data/bmap_${map.id}.jpg`, function (err) {
+        .toFile(`./src/Data/bmaps/bmap_${map.id}.jpg`, function (err) {
             if (err) console.log(err); else {console.log('Success!')}
     });
 }
