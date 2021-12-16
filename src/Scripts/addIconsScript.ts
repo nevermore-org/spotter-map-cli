@@ -7,6 +7,7 @@ import PROMPT_SCHEMAS from "./enum/PROMPT_SCHEMAS";
 import { mapDimensionsFromPoints, translatePointArray } from "../Util/mapUtil";
 import { MAP_DETAILS } from "../API/enum/MAP_DETAILS";
 import fs from 'fs';
+import ANSI from "./enum/ANSI";
 
 
 export default class addIconsScript implements ScriptDefault {
@@ -17,7 +18,7 @@ export default class addIconsScript implements ScriptDefault {
         'default': 'italic 25px Candara',
         'sectorName': 'italic 25px Candara'
     }
-    wantText: boolean = false; // for now it's here, should add it to the prompt
+    wantLabels: boolean = false; // default; user can decide in prompt
 
     constructor () {
         // just some default values, will be overriden later
@@ -54,7 +55,7 @@ export default class addIconsScript implements ScriptDefault {
 
     private addIconsToMap = async (map: FullMapInfo) => {
         const inputMapPath =  `./output/bmaps/bmap_${map.id}.jpg`;
-        const outputPath =  `./output/fmaps/${this.wantText ? 'with_labels/fmap+labels_': 'icons_only/fmap_'}${map.id}.jpg`;
+        const outputPath =  `./output/fmaps/${this.wantLabels ? 'with_labels/fmap+labels_': 'icons_only/fmap_'}${map.id}.jpg`;
         
         // check the mapDimensions object first -> then create canvas of the same size as the base map
         this.mapDimensions = mapDimensionsFromPoints(map.continent_rect);
@@ -99,7 +100,7 @@ export default class addIconsScript implements ScriptDefault {
                 this.drawIconOnMap(map.tasks[key].coord, icons['heart']);
             }
 
-            if (this.wantText) {
+            if (this.wantLabels) {
                 // draw all sector names
                 for (const key in map.sectors){
                     const sector = map.sectors[key];
@@ -112,20 +113,28 @@ export default class addIconsScript implements ScriptDefault {
             fs.writeFileSync(outputPath, buffer);
         })
     
-        console.log(`Sucessfully created full map ${this.wantText ? '(with labels)': '(icons only)'} of ${map.name}...`);
+        console.log(`Sucessfully created full map ${this.wantLabels ? '(with labels)': '(icons only)'} of ${map.name}...`);
     }
 
 
     public runScript = async (optarg?: string | undefined) => {
         prompt.start();
         prompt.message = "";
-    
+
+        // base Schema is map, then its extended with wantLabels
         const schema: Schema = PROMPT_SCHEMAS['MAP'];
+        
+        schema.properties['wantLabels'] = {
+            description: `${ANSI.CYAN}Do you want sector labels? ${ANSI.BRIGHT_BLACK}(y/n)${ANSI.RESET}`,
+            type: 'string',
+            required: false
+        }
     
         prompt.get(schema, async (err, answer) => {
             if (err){ return };
             const mapID = <number> answer.mapID;
             const map = MAP_DETAILS[mapID];
+            this.wantLabels = ['y', 'yes', 'aye'].includes(<string> answer.wantLabels);
             
             if (!map){
                 console.error('There are unfortunately no data for this map in GW2 API.');
