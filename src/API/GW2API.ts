@@ -5,7 +5,7 @@ import RegionInfo from "../Model/RegionInfo";
 import { chunkify } from "../Util/util";
 import { GW_API_URL } from "./enum/GW_API_URL"
 import stringify from "json-stringify-pretty-compact";
-import TYRIA_MAPS from "../Scripts/enum/TYRIA_MAPS";
+import TYRIA_MAPS from "./enum/TYRIA_MAPS";
 
 
 export const getMapInfo = async (mapID: number) => {

@@ -3,9 +3,9 @@ import prompt, { Schema } from "prompt";
 import FullMapInfo from "../Model/FullMapInfo";
 import { MapDimensions } from "../Model/MapDimensions";
 import ScriptDefault from "../Model/ScriptDefault";
-import PROMPT_SCHEMAS from "../Util/enum/PROMPT_SCHEMAS";
+import PROMPT_SCHEMAS from "./enum/PROMPT_SCHEMAS";
 import { mapDimensionsFromPoints, translatePointArray } from "../Util/mapUtil";
-import { MAP_DETAILS } from "./enum/MAP_DETAILS";
+import { MAP_DETAILS } from "../API/enum/MAP_DETAILS";
 import fs from 'fs';
 
 
@@ -17,7 +17,7 @@ export default class addIconsScript implements ScriptDefault {
         'default': 'italic 25px Candara',
         'sectorName': 'italic 25px Candara'
     }
-    wantText: boolean = true; // for now it's here, should add it to the prompt
+    wantText: boolean = false; // for now it's here, should add it to the prompt
 
     constructor () {
         // just some default values, will be overriden later
@@ -112,7 +112,7 @@ export default class addIconsScript implements ScriptDefault {
             fs.writeFileSync(outputPath, buffer);
         })
     
-        console.log(`Sucessfully created the f(ull)map for ${map.name}...`);
+        console.log(`Sucessfully created full map ${this.wantText ? '(with labels)': '(icons only)'} of ${map.name}...`);
     }
 
 

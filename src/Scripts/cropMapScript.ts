@@ -2,9 +2,9 @@ import prompt, { Schema } from "prompt";
 import sharp from "sharp";
 import MapInfo from "../Model/MapInfo";
 import ScriptDefault from "../Model/ScriptDefault";
-import PROMPT_SCHEMAS from "../Util/enum/PROMPT_SCHEMAS";
+import PROMPT_SCHEMAS from "./enum/PROMPT_SCHEMAS";
 import { mapDimensionsFromPoints } from "../Util/mapUtil";
-import TYRIA_MAPS from "./enum/TYRIA_MAPS";
+import TYRIA_MAPS from "../API/enum/TYRIA_MAPS";
 
 export default class cropMapScript implements ScriptDefault {
     sharpInstance: sharp.Sharp;

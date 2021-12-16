@@ -1,10 +1,7 @@
 import http from 'http';
-import ANSI from './Util/enum/ANSI';
-import sharp from 'sharp';
+import ANSI from './Scripts/enum/ANSI';
 import prompt, { message, Schema } from 'prompt';
 import { SCRIPTS } from './Scripts/enum/SCRIPTS';
-import { getTyrianMapsData } from './API/GW2API';
-import addIconsScript from './Scripts/addIconsScript';
 
 // http.createServer(() => {
 // }).listen("8080");
@@ -42,7 +39,7 @@ async function main() {
         
         const scriptInfo = SCRIPTS[<number> result.scriptIndex - 1];
 
-        await scriptInfo.script?.runScript();
+        await scriptInfo.script.runScript();
     });
 }
 

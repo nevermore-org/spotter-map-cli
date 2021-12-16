@@ -1,7 +1,7 @@
 import ScriptDefault from "../Model/ScriptDefault";
-import ANSI from "../Util/enum/ANSI";
+import ANSI from "./enum/ANSI";
 import { groupBy } from "../Util/util";
-import TYRIA_MAPS from "./enum/TYRIA_MAPS";
+import TYRIA_MAPS from "../API/enum/TYRIA_MAPS";
 
 export default class printAllMapsScript implements ScriptDefault {
     

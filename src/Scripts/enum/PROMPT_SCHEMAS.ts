@@ -1,5 +1,5 @@
 import { Schema } from "prompt";
-import TYRIA_MAPS from "../../Scripts/enum/TYRIA_MAPS";
+import TYRIA_MAPS from "../../API/enum/TYRIA_MAPS";
 import ANSI from "./ANSI";
 
 const PROMPT_SCHEMAS: Record<string, Schema> = {
