@@ -24755,7 +24755,7 @@ export const MAP_DETAILS: Record<string,FullMapInfo> = {
           "65": {
             "name": "Village of Shaemoor",
             "level": 4,
-            "coord": [11083.1, 12200.1],
+            "coord": [11050.1, 12075.1], // [11083.1, 12200.1]
             "bounds": [
               [10902.1, 12751.4],
               [10887.4, 12477],
@@ -24807,7 +24807,7 @@ export const MAP_DETAILS: Record<string,FullMapInfo> = {
           "67": {
             "name": "Shaemoor Garrison",
             "level": 6,
-            "coord": [11335.8, 12412.6],
+            "coord": [11335.8, 12380.6], // y = 12412.6
             "bounds": [
               [11216.7, 12478.6],
               [11225, 12301.3],

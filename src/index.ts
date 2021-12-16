@@ -4,6 +4,7 @@ import sharp from 'sharp';
 import prompt, { message, Schema } from 'prompt';
 import { SCRIPTS } from './Scripts/enum/SCRIPTS';
 import { getTyrianMapsData } from './API/GW2API';
+import addIconsScript from './Scripts/addIconsScript';
 
 // http.createServer(() => {
 // }).listen("8080");
@@ -36,11 +37,12 @@ async function main() {
         }
     }
 
-    prompt.get(schema, function(err, result){
+    prompt.get(schema, async function(err, result){
         if (err){ return };
         
         const scriptInfo = SCRIPTS[<number> result.scriptIndex - 1];
-        scriptInfo.runFunction(scriptInfo.optarg);
+
+        await scriptInfo.script?.runScript();
     });
 }
 

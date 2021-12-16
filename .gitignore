@@ -137,7 +137,3 @@ dist
 # The Tyria map .jpg file
 
 tyria.jpg
-
-# The Output-Data-Folder
-
-/src/Data
