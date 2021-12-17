@@ -1,6 +1,6 @@
 import http from 'http';
 import ANSI from './Scripts/enum/ANSI';
-import prompt, { message, Schema } from 'prompt';
+import prompt, { Schema } from 'prompt';
 import { SCRIPTS } from './Scripts/enum/SCRIPTS';
 
 // http.createServer(() => {
@@ -34,7 +34,7 @@ async function main() {
         }
     }
 
-    prompt.get(schema, async function(err, result){
+    prompt.get(schema, async (err, result) => {
         if (err){ return };
         
         const scriptInfo = SCRIPTS[<number> result.scriptIndex - 1];

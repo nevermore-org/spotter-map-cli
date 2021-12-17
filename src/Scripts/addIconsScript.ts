@@ -74,7 +74,7 @@ export default class addIconsScript implements ScriptDefault {
 
         // TODO: Refactor this to be more DRY    
         // first draws base map as background, then adds all the icons
-        loadImage(inputMapPath).then(baseMap => {
+        loadImage(inputMapPath).then((baseMap: Image) => {
             this.context.drawImage(baseMap, 0, 0);
 
             // pois + vistas + waypoints
