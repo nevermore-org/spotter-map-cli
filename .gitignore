@@ -137,3 +137,7 @@ dist
 # The Tyria map .jpg file
 
 tyria.jpg
+
+# Tiles bmap test folder
+
+output/tiles/*

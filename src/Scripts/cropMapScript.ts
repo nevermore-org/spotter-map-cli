@@ -5,7 +5,6 @@ import ScriptDefault from "../Model/ScriptDefault";
 import PROMPT_SCHEMAS from "./enum/PROMPT_SCHEMAS";
 import { mapDimensionsFromPoints } from "../Util/mapUtil";
 import TYRIA_MAPS from "../API/enum/TYRIA_MAPS";
-const gm = require('gm').subClass({imageMagick: true});
 
 export default class cropMapScript implements ScriptDefault {
     sharpInstance: sharp.Sharp;

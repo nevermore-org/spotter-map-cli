@@ -1,5 +1,6 @@
 import { ScriptInfo } from "../../Model/ScriptInfo";
 import addIconsScript from "../addIconsScript";
+import createBaseImagePoC from "../createBaseImagePoC";
 import cropMapScript from "../cropMapScript";
 import printAllMapsScript from "../printAllMapsScript";
 
@@ -21,7 +22,12 @@ export const SCRIPTS: ScriptInfo[] = [
     // }
     {
         name: 'Add icons to a given map',
-        description: 'Map must have its bmap_<mapID> file in ./src/Data.',
+        description: 'Map must have its bmap_<mapID> file in ./output/bmaps.',
         script: new addIconsScript()
-    }
+    },
+    // {
+    //     name: 'Create bmap from tiles PoC',
+    //     description: 'Imagine vivid description here: -> _ <-',
+    //     script: new createBaseImagePoC()
+    // }
 ]
