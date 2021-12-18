@@ -25,9 +25,9 @@ export const SCRIPTS: ScriptInfo[] = [
         description: 'Map must have its bmap_<mapID> file in ./output/bmaps.',
         script: new addIconsScript()
     },
-    // {
-    //     name: 'Create bmap from tiles PoC',
-    //     description: 'Imagine vivid description here: -> _ <-',
-    //     script: new createBaseImagePoC()
-    // }
+    {
+        name: 'Create bmap from tiles PoC',
+        description: 'Imagine vivid description here: -> _ <-',
+        script: new createBaseImagePoC()
+    }
 ]

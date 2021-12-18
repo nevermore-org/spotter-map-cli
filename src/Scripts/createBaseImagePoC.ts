@@ -8,7 +8,7 @@ import { mapDimensionsFromPoints } from "../Util/mapUtil";
 import { MapDimensions } from "../Model/MapDimensions";
 
 export default class createBaseImagePoC implements ScriptDefault {
-    mapID: number = 15;
+    mapID: number = 1228;
     mapInfo: MapInfo;
     mapDims: MapDimensions;
     canvas: Canvas;
@@ -23,37 +23,60 @@ export default class createBaseImagePoC implements ScriptDefault {
 
     }
 
-    private getTile = async (x: number, y: number) => {
-        console.log(`Getting the tile with coors: X: ${x} Y: ${y}`);
-        return loadImage(`${GW_API_URL.TILES}/${x}/${y}.jpg`);
+    private getTile = async (x: number, y: number, silent: boolean = true) => {
+        if(!silent) {
+            console.log(`Getting the tile with coors: X: ${x} Y: ${y}`)
+        };
+
+        //${GW_API_URL.TILES}
+        return loadImage(`./tiles/1/1/7/${x}/${y}.jpg`);
     }
 
-
+    /**
+     * 
+     */
     private createBmap = async () => {
-        // relative up-left tile x
+        // relative up-left tile (X, Y); is the first tile which collides with the map-rect
         const relULTileX = Math.floor(this.mapDims.upper_left.x / this.tileSize);
         const relULTileY = Math.floor(this.mapDims.upper_left.y / this.tileSize);
-
-        // first tile that collides with the map-rect ^^^
-
+        
         // ACR == horizontal
         const tileCountACR = Math.floor(this.mapDims.width / this.tileSize);
         const tileCountVERT = Math.floor(this.mapDims.height / this.tileSize);
 
-        for (let offsetX = 0; offsetX < tileCountACR; offsetX++){
-            for (let offsetY = 0; offsetY < tileCountVERT; offsetY++){
-                const tile = await this.getTile(relULTileX + offsetX, relULTileY + offsetY);
-                this.context.drawImage(tile, offsetX * this.tileSize, offsetY * this.tileSize);
+        let UPLCropY = this.mapDims.upper_left.y;
+        // 2D for loop 
+        for (let offsetY = 0; offsetY <= tileCountVERT + 1; offsetY++){
+            const absTileY = this.tileSize * (relULTileY + offsetY);
+
+            const cropRectHeight = this.tileSize - (UPLCropY - absTileY);
+            // up-left X coord for the (possibly) smaller cropped part of a given tile
+            let UPLCropX = this.mapDims.upper_left.x;
+
+            for (let offsetX = 0; offsetX <= tileCountACR + 1; offsetX++){
+                // absolute tile x coord
+                const absTileX = this.tileSize * (relULTileX + offsetX);
+                let cropRectWidth = this.tileSize - (UPLCropX - absTileX);
+                
+                // input for this are the relative (X,Y) coordinates of the tile
+                const tile = await this.getTile(relULTileX + offsetX, relULTileY + offsetY, false);
+
+                this.context.drawImage(tile,
+                    this.tileSize - cropRectWidth, this.tileSize - cropRectHeight, // source (X, Y)
+                    cropRectWidth, cropRectHeight, // source (width, height),
+                    UPLCropX - this.mapDims.upper_left.x, UPLCropY - this.mapDims.upper_left.y, // destination (X, Y), aka relative Up-Left Crop Rect point
+                    cropRectWidth, cropRectHeight // dont want resize the image -> should stay the same as source dims
+                );
+
+                UPLCropX += cropRectWidth;
             }
+
+            UPLCropY += cropRectHeight;
         }
 
         const buffer = this.canvas.toBuffer('image/jpeg');
         fs.writeFileSync(`./output/tiles/${this.mapID}.jpg`, buffer); // ${offsetX + tileCountACR * offsetY}
-
-
     }
-
-
 
     public async runScript() {
         await this.createBmap();

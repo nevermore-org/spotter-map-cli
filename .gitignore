@@ -141,3 +141,7 @@ tyria.jpg
 # Tiles bmap test folder
 
 output/tiles/*
+
+# Donwloaded tiles
+
+tiles/*
