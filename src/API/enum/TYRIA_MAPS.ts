@@ -858,21 +858,6 @@ const TYRIA_MAPS: MapInfo[] = [
     "continent_rect": [[11200, 32000], [14656, 34816]]
   },
   {
-    "id": 1326,
-    "name": "Dragon Bash Arena",
-    "min_level": 80,
-    "max_level": 80,
-    "default_floor": 1,
-    "type": "Public",
-    "floors": [1, 3, 2, 0],
-    "region_id": 1,
-    "region_name": "Shiverpeak Mountains",
-    "continent_id": 1,
-    "continent_name": "Tyria",
-    "map_rect": [[-27648, -18432], [27648, 21504]],
-    "continent_rect": [[19456, 13312], [21760, 14976]]
-  },
-  {
     "id": 1330,
     "name": "Grothmar Valley",
     "min_level": 80,

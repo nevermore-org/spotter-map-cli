@@ -1,5 +1,4 @@
 import { Canvas, createCanvas, loadImage, NodeCanvasRenderingContext2D } from "canvas";
-import { GW_API_URL } from "../API/enum/GW_API_URL";
 import TYRIA_MAPS from "../API/enum/TYRIA_MAPS";
 import MapInfo from "../Model/MapInfo";
 import ScriptDefault from "../Model/ScriptDefault";
@@ -8,7 +7,7 @@ import { mapDimensionsFromPoints } from "../Util/mapUtil";
 import { MapDimensions } from "../Model/MapDimensions";
 
 export default class createBaseImagePoC implements ScriptDefault {
-    mapID: number = 1228;
+    mapID: number = 1330;
     mapInfo: MapInfo;
     mapDims: MapDimensions;
     canvas: Canvas;
@@ -41,19 +40,19 @@ export default class createBaseImagePoC implements ScriptDefault {
         const relULTileY = Math.floor(this.mapDims.upper_left.y / this.tileSize);
         
         // ACR == horizontal
-        const tileCountACR = Math.floor(this.mapDims.width / this.tileSize);
-        const tileCountVERT = Math.floor(this.mapDims.height / this.tileSize);
+        const tileCountACR = Math.ceil(this.mapDims.width / this.tileSize);
+        const tileCountVERT = Math.ceil(this.mapDims.height / this.tileSize);
 
         let UPLCropY = this.mapDims.upper_left.y;
         // 2D for loop 
-        for (let offsetY = 0; offsetY <= tileCountVERT + 1; offsetY++){
+        for (let offsetY = 0; offsetY <= tileCountVERT; offsetY++){
             const absTileY = this.tileSize * (relULTileY + offsetY);
 
             const cropRectHeight = this.tileSize - (UPLCropY - absTileY);
             // up-left X coord for the (possibly) smaller cropped part of a given tile
             let UPLCropX = this.mapDims.upper_left.x;
 
-            for (let offsetX = 0; offsetX <= tileCountACR + 1; offsetX++){
+            for (let offsetX = 0; offsetX <= tileCountACR; offsetX++){
                 // absolute tile x coord
                 const absTileX = this.tileSize * (relULTileX + offsetX);
                 let cropRectWidth = this.tileSize - (UPLCropX - absTileX);
